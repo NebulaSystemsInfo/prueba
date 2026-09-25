@@ -32,13 +32,20 @@ export default function Contacto() {
               </ul>
             </div>
           </div>
-          <iframe
-            className="contacto__mapa"
-            title="Mapa de la capilla"
-            src={mapa}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
+          {import.meta.env.VITE_SIN_MAPA ? (
+            <a className="contacto__mapa contacto__mapa--enlace" href={hermandad.mapa} target="_blank" rel="noreferrer">
+              <img src={hermandad.escudo} alt="" />
+              <span>Ver la capilla en Google Maps →</span>
+            </a>
+          ) : (
+            <iframe
+              className="contacto__mapa"
+              title="Mapa de la capilla"
+              src={mapa}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          )}
         </div>
       </div>
     </section>

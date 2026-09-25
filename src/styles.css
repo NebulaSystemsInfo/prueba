@@ -281,3 +281,9 @@ h1, h2, h3 { font-family: var(--titulo); line-height: 1.2; margin: 0; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+.contacto__mapa--enlace {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
+  text-decoration: none; font-weight: 700; color: var(--blanco);
+  background: radial-gradient(circle at 50% 40%, var(--verde-medio), var(--verde-oscuro));
+}
+.contacto__mapa--enlace img { width: 90px; }
