@@ -1,18 +1,13 @@
 import { hermandad } from '../data.js'
 
-// Logotipo: escudo + nombre. Si existe un logotipo oficial (hermandad.logotipo)
-// se muestra en su lugar.
-export default function Logo({ claro = false }) {
-  if (hermandad.logotipo) {
-    return <img className="logo-img" src={hermandad.logotipo} alt={`Logotipo ${hermandad.nombreCorto}`} />
-  }
+export default function Logo() {
   return (
-    <span className={`logo ${claro ? 'logo--claro' : ''}`}>
-      <img className="logo__escudo" src={hermandad.escudo} alt="" />
+    <span className="logo">
+      <img className="logo__escudo" src={hermandad.escudo} alt="" width="40" height="50" />
       <span className="logo__texto">
-        <span className="logo__pre">Hdad. Stmo.</span>
-        <span className="logo__nombre">{hermandad.nombreCorto}</span>
-        <span className="logo__lugar">Pedrera</span>
+        <span className="logo__pre">Hermandad del Stmo.</span>
+        <span className="logo__nombre">Cristo de la Sangre</span>
+        <span className="logo__pre">Pedrera</span>
       </span>
     </span>
   )

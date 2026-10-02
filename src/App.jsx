@@ -2,7 +2,8 @@ import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
 import Historia from './components/Historia.jsx'
 import Titular from './components/Titular.jsx'
-import SemanaSanta from './components/SemanaSanta.jsx'
+import Escudo from './components/Escudo.jsx'
+import ViernesSanto from './components/ViernesSanto.jsx'
 import Cultos from './components/Cultos.jsx'
 import Galeria from './components/Galeria.jsx'
 import Hermano from './components/Hermano.jsx'
@@ -17,7 +18,8 @@ export default function App() {
         <Hero />
         <Historia />
         <Titular />
-        <SemanaSanta />
+        <Escudo />
+        <ViernesSanto />
         <Cultos />
         <Galeria />
         <Hermano />

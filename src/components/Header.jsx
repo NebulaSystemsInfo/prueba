@@ -4,10 +4,10 @@ import { navegacion } from '../data.js'
 
 export default function Header() {
   const [abierto, setAbierto] = useState(false)
-  const [scroll, setScroll] = useState(false)
+  const [solido, setSolido] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScroll(window.scrollY > 40)
+    const onScroll = () => setSolido(window.scrollY > 40)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -17,11 +17,13 @@ export default function Header() {
     document.body.style.overflow = abierto ? 'hidden' : ''
   }, [abierto])
 
+  const cerrar = () => setAbierto(false)
+
   return (
-    <header className={`header ${scroll || abierto ? 'header--solido' : ''}`}>
+    <header className={`header ${solido || abierto ? 'header--solido' : ''}`}>
       <div className="contenedor header__barra">
-        <a href="#inicio" className="header__marca" onClick={() => setAbierto(false)}>
-          <Logo claro />
+        <a href="#inicio" className="header__marca" onClick={cerrar} aria-label="Inicio">
+          <Logo />
         </a>
         <button
           className={`hamburguesa ${abierto ? 'hamburguesa--abierta' : ''}`}
@@ -36,9 +38,7 @@ export default function Header() {
           <ul>
             {navegacion.map((item) => (
               <li key={item.id}>
-                <a href={`#${item.id}`} onClick={() => setAbierto(false)}>
-                  {item.label}
-                </a>
+                <a href={`#${item.id}`} onClick={cerrar}>{item.label}</a>
               </li>
             ))}
           </ul>
