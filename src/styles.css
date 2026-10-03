@@ -79,37 +79,90 @@ p { margin: 0 0 1rem; }
 .logo__pre { font-family: var(--capitular); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--oro); }
 .logo__nombre { font-family: var(--display); font-size: 1.2rem; font-weight: 700; }
 
-.header { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background 0.3s, box-shadow 0.3s; }
-.header--solido { background: rgba(12, 31, 13, 0.96); box-shadow: 0 2px 18px rgba(0,0,0,.3); backdrop-filter: blur(6px); }
-.header__barra { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-.header__marca { text-decoration: none; position: relative; z-index: 2; }
+.header { position: fixed; inset: 0 0 auto 0; z-index: 50; }
+/* El fondo va en un pseudo-elemento: un backdrop-filter en .header
+   convertiría el menú móvil (position: fixed) en hijo de una caja de 72px */
+.header::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(rgba(12,31,13,.7), rgba(12,31,13,0));
+  transition: background .3s, box-shadow .3s;
+}
+.header--solido::before {
+  background: rgba(12, 31, 13, 0.94);
+  box-shadow: 0 1px 0 rgba(201,168,90,.35), 0 6px 24px rgba(0,0,0,.3);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.header__barra {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  height: 76px; transition: height .3s;
+}
+.header--solido .header__barra { height: 64px; }
+.header__marca { text-decoration: none; position: relative; z-index: 3; flex-shrink: 0; }
 
 .hamburguesa {
-  position: relative; z-index: 2; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer;
-  display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 10px;
+  position: relative; z-index: 3; width: 46px; height: 46px; margin-right: -8px;
+  border: 0; background: transparent; cursor: pointer; border-radius: 4px;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 6px; padding: 11px;
 }
-.hamburguesa span { display: block; height: 2px; background: var(--oro-claro); transition: transform .3s, opacity .3s; }
-.hamburguesa--abierta span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-.hamburguesa--abierta span:nth-child(2) { opacity: 0; }
-.hamburguesa--abierta span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.hamburguesa span { display: block; height: 2px; width: 24px; background: var(--oro-claro); border-radius: 1px; transition: transform .3s, opacity .3s, width .3s; }
+.hamburguesa span:nth-child(2) { width: 16px; }
+.header--abierto .hamburguesa span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.header--abierto .hamburguesa span:nth-child(2) { opacity: 0; }
+.header--abierto .hamburguesa span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
+/* Menú móvil a pantalla completa */
 .nav {
-  position: fixed; inset: 0; background: var(--noche);
-  display: flex; align-items: center; justify-content: center;
-  transform: translateX(100%); transition: transform 0.35s ease; visibility: hidden;
+  position: fixed; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6rem;
+  padding: 90px 24px max(32px, env(safe-area-inset-bottom, 0px));
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(201,168,90,.14), transparent 60%),
+    var(--noche);
+  opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s;
+  overflow-y: auto;
 }
-.nav--abierta { transform: none; visibility: visible; }
-.nav ul { list-style: none; margin: 0; padding: 0; text-align: center; }
-.nav li { margin: 1rem 0; }
-.nav a { color: var(--cal); text-decoration: none; font-family: var(--display); font-size: 1.8rem; font-weight: 600; }
-.nav a:hover { color: var(--oro); }
+.header--abierto .nav { opacity: 1; visibility: visible; }
+.nav__escudo { width: 64px; filter: drop-shadow(0 8px 18px rgba(0,0,0,.5)); }
+.nav ul { list-style: none; margin: 0; padding: 0; width: min(100%, 320px); text-align: center; }
+.nav li {
+  border-bottom: 1px solid rgba(201,168,90,.18);
+  opacity: 0; transform: translateY(10px); transition: opacity .35s, transform .35s;
+  transition-delay: calc(var(--i) * 40ms);
+}
+.nav li:first-child { border-top: 1px solid rgba(201,168,90,.18); }
+.header--abierto .nav li { opacity: 1; transform: none; }
+.nav a:not(.boton) {
+  display: block; padding: 0.7rem 0; color: var(--cal); text-decoration: none;
+  font-family: var(--display); font-size: 1.65rem; font-weight: 600; line-height: 1.2;
+}
+.nav a:not(.boton):hover, .nav a.activo { color: var(--oro-claro); }
 
 @media (min-width: 1080px) {
-  .hamburguesa { display: none; }
-  .nav { position: static; background: none; transform: none; visibility: visible; }
-  .nav ul { display: flex; gap: 1.7rem; }
-  .nav li { margin: 0; }
-  .nav a { font-family: var(--capitular); font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+  .hamburguesa, .nav__escudo { display: none; }
+  .header__barra { position: relative; }
+  .nav {
+    position: absolute; inset: 0 32px 0 auto; z-index: 3; padding: 0; background: none;
+    flex-direction: row; gap: 1.6rem; opacity: 1; visibility: visible; overflow: visible;
+    max-width: 1180px; margin-inline: auto;
+  }
+  .header .nav { left: auto; right: max(32px, calc((100vw - 1180px) / 2 + 32px)); }
+  .nav ul { display: flex; gap: 1.5rem; width: auto; }
+  .nav li, .nav li:first-child { border: 0; opacity: 1; transform: none; }
+  .nav a:not(.boton) {
+    position: relative; padding: 0.4rem 0;
+    font-family: var(--capitular); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(251,248,240,.88);
+  }
+  .nav a:not(.boton)::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--oro);
+    transform: scaleX(0); transition: transform .25s;
+  }
+  .nav a:not(.boton):hover::after, .nav a.activo::after { transform: scaleX(1); }
+  .nav__cta { padding: 0.6rem 1.1rem; font-size: 0.7rem; }
+}
+@media (min-width: 1080px) and (max-width: 1240px) {
+  .nav ul { gap: 1.1rem; }
+  .nav a:not(.boton) { letter-spacing: 0.1em; }
 }
 
 /* ---------- Hero ---------- */
